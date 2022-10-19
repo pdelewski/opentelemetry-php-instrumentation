@@ -18,37 +18,31 @@ https://github.com/mlocati/docker-php-extension-installer :
 $ install-php-extensions open-telemetry/opentelemetry-php-instrumentation@main
 ```
 
-## Usage
+## Installation from source
 
-The following example adds an observer to the `DemoClass::run` method, and provides two functions which will be run before and after the method call.
+```
+git clone https://github.com/pdelewski/opentelemetry-php-instrumentation.git
+cd opentelemetry-php-instrumentation
+make 
+make install
+```
 
-The `pre` method starts and activates a span. The `post` method ends the span after the observed method has finished.
+Add to php.ini
 
-```php
-<?php
-
-$tracer = new Tracer(...);
-
-OpenTelemetry\Instrumentation\hook(
-    DemoClass::class,
-    'run',
-    static function (DemoClass $demo, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($tracer) {
-        $tracer->spanBuilder($class)
-            ->startSpan()
-            ->activate();
-    },
-    static function (DemoClass $demo, array $params, $returnValue, ?Throwable $exception) use ($tracer) {
-        $scope = Context::storage()->scope();
-        $scope?->detach();
-        $span = Span::fromContext($scope->context());
-        $exception && $span->recordException($exception);
-        $span->setStatus($exception ? StatusCode::STATUS_ERROR : StatusCode::STATUS_OK);
-        $span->end();
-    }
-);
+```
+extension=otel_instrumentation.so
 ```
 
 There are more examples in the [tests directory](./tests/)
+
+## Usage
+
+In order to instrument application hooks have to be loaded into application, therefore additional 
+require statement is needed
+
+```
+require __DIR__ . '[path to opentelemetry-php-instrumentation]/hooks/hooks.php';
+```
 
 ## Contributing
 See [DEVELOPMENT.md](DEVELOPMENT.md) and https://github.com/open-telemetry/opentelemetry-php/blob/main/CONTRIBUTING.md
