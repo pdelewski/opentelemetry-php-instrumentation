@@ -1,0 +1,12 @@
+{
+    "require": {
+        "guzzlehttp/psr7": "^2.4",
+        "symfony/http-client": "^6.1",
+        "open-telemetry/api": "^0.0.15",
+        "monolog/monolog": "^2.8"
+    },
+    "require-dev": {
+        "open-telemetry/sdk": "^0.0.15",
+        "open-telemetry/sdk-contrib": "^0.0.15"
+    }
+}
