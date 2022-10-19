@@ -33,7 +33,7 @@ Add to php.ini
 extension=otel_instrumentation.so
 ```
 
-There are more examples in the [tests directory](./tests/)
+There are examples in the [tests directory](./tests/)
 
 ## Usage
 
